@@ -193,9 +193,11 @@ def write_overview_page(services: List[ServiceOverview], output_path: Path):
 def load_metadata_config(metadata_config_path: Path) -> ServiceMetadata:
     yaml_dict = load_yaml(metadata_config_path)
     description = MetadataServiceDescription(**yaml_dict.get("service", {}))
-    api_versions = []
-    for version in yaml_dict.get("api_versions", []):
-        api_versions.append(MetadataAPIVersion(**version))
+    api_versions = [
+        MetadataAPIVersion(**version)
+        for version in yaml_dict.get("api_versions", [])
+    ]
+
     return ServiceMetadata(description, api_versions)
 
 def main(gopath: Path, metadata_config_path: Path, go_src_parent: Path, service_bases_path: Path, output_path: Path):
